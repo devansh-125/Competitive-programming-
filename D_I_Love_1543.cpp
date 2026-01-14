@@ -189,7 +189,7 @@ void dib(){
             }
         }
     }
-    cout << ans << endl;
+    // cout << ans << endl;
 }
 
 int32_t main(){
