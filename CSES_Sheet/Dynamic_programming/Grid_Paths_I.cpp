@@ -1,38 +1,47 @@
-
 // Radhe Radhe
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
 
-vector<int> dp(1000001 , -1);
-
-int solve(int x){
-    if(x < 0) return 1e18;
-    if(x == 0) return 0;
-    if(dp[x] != -1) return dp[x];
-
-    vector<int> a;
-    int temp = x;
-
-    while(temp > 0){
-        int d = temp % 10;
-        if(d) a.push_back(d);
-        temp /= 10;
-    }
-
-    int ans = 1e18;
-
-    for(int i = 0 ; i < a.size() ; i++){
-        ans = min(ans , 1 + solve(x - a[i]));
-    }
-    return dp[x] = ans;
-}
+const int mod = 1e9 + 7;
 
 void dib(){
     int n;
     cin >> n;
 
-    cout << solve(n) << endl;
+    vector<vector<int>> grid(n , vector<int>(n , 1));
+
+    for(int i = 0 ; i < n ; i++){
+        string s;
+        cin >> s;
+        for(int j = 0 ; j < n ; j++){
+            if(s[j] == '*') grid[i][j] = -1;
+        }
+    }
+    vector<vector<int>> dp(n , vector<int>(n , 0));
+
+    if(grid[0][0] == -1){
+        cout << 0 << endl;
+        return;
+    }
+
+    dp[0][0] = 1;
+
+    for(int i = 0 ; i < n ; i++){
+        for(int j = 0 ; j < n ; j++){
+
+            if(grid[i][j] == -1) continue;
+
+            if(i + 1 < n && grid[i+1][j] != -1){
+                dp[i+1][j] = (dp[i+1][j] + dp[i][j]) % mod;
+            }
+            if(j + 1 < n && grid[i][j+1] != -1){
+                dp[i][j+1] = (dp[i][j+1] + dp[i][j]) % mod;
+            }
+        }
+    }
+
+    cout << dp[n-1][n-1] << endl;
 }
 
 int32_t main(){
